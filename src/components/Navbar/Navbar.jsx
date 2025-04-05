@@ -3,12 +3,28 @@ import "./Navbar.css";
 import useMovieList from "../../Hooks/useMovieList";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import ThemeContext from "../../context/ThemeContext";
+import { useContext } from "react";
 
 function Navbar() {
   const navigator = useNavigate();
   const [isAutoCompleteVisible, setisAutoCompleteVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+
+  const { theme, setTheme } = useContext(ThemeContext);
+
+  function updateTheme() {
+    if (theme == "dark") {
+      setTheme("light");
+      localStorage.setItem("app-theme", "light");
+    } else {
+      setTheme("dark");
+      localStorage.setItem("app-theme", "dark");
+    }
+  }
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -61,7 +77,12 @@ function Navbar() {
             ))}
         </div>
       </div>
-      <div>Theme</div>
+      <div onClick={updateTheme}>
+        <FontAwesomeIcon
+          className="theme-icon"
+          icon={theme == "dark" ? faSun : faMoon}
+        />
+      </div>
     </div>
   );
 }
